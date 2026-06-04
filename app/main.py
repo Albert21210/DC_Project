@@ -10,7 +10,7 @@ from app.routers import products, orders, analytics, customers, employees, suppl
 
 app = FastAPI(title="Компьютерный магазин «Pixel»", version="1.0.0")
 
-# CORS (для разработки)
+# CORS
 app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.add_middleware(
