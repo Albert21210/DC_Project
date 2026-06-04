@@ -29,7 +29,7 @@ app.include_router(employees.router)
 app.include_router(suppliers.router)
 app.include_router(categories.router)
 
-# Статика и SPA
+# Статика и SPA index.html
 STATIC = pathlib.Path(__file__).parent / "static"
 TEMPLATES = pathlib.Path(__file__).parent / "templates"
 
