@@ -36,3 +36,33 @@
 }
 .stat-card__value { font-size: 1.6rem; font-weight: 700; color: var(--clr-primary); }
 .stat-card__label { font-size: .8rem; color: var(--clr-muted); margin-top: 4px; }
+
+/* ── Table ── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+th { background: #f7fafc; font-weight: 600; color: var(--clr-muted);
+     font-size: .75rem; text-transform: uppercase; padding: 10px 14px;
+     text-align: left; border-bottom: 2px solid var(--clr-border); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--clr-border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f7fafc; }
+
+/* ── Badge ── */
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 20px;
+  font-size: .75rem; font-weight: 600;
+}
+.badge-success { background: #c6f6d5; color: #276749; }
+.badge-warning { background: #fefcbf; color: #7b341e; }
+.badge-info    { background: #bee3f8; color: #2c5282; }
+.badge-danger  { background: #fed7d7; color: #9b2335; }
+
+/* ── Form ── */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 5px; }
+.form-control {
+  width: 100%; padding: 8px 12px; border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius); font-size: .9rem; transition: border-color .15s;
+}
+.form-control:focus { outline: none; border-color: var(--clr-primary); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
