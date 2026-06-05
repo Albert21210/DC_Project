@@ -70,3 +70,9 @@ BEGIN
     WHERE ProductID = OLD.ProductID;
 END;
 """
+
+
+def init_schema(conn: sqlite3.Connection) -> None:
+    """Создаёт таблицы и триггер (идемпотентно)."""
+    conn.executescript(_DDL)
+    conn.commit()
