@@ -55,3 +55,36 @@ def create(conn: sqlite3.Connection, customer_id: int,
     except Exception as e:
         conn.rollback()
         raise RuntimeError(f"Ошибка создания заказа: {e}") from e
+    
+
+def confirm_payment(conn: sqlite3.Connection, order_id: int) -> None:
+    try:
+        conn.execute("UPDATE Orders SET OrderStatus='Оплачен' WHERE OrderID=?", (order_id,))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise RuntimeError(str(e)) from e
+
+
+def cancel_order(conn: sqlite3.Connection, order_id: int) -> None:
+    """Отменяет заказ — ставит статус «Отменён».
+
+    Raises:
+        ValueError:   если заказ уже оплачен или выдан.
+        RuntimeError: при ошибке БД.
+    """
+    row = conn.execute(
+        "SELECT OrderStatus FROM Orders WHERE OrderID=?", (order_id,)
+    ).fetchone()
+    if not row:
+        raise ValueError(f"Заказ №{order_id} не найден")
+    if row[0] in ("Оплачен", "Выдан"):
+        raise ValueError(f"Нельзя отменить заказ со статусом «{row[0]}»")
+    try:
+        conn.execute(
+            "UPDATE Orders SET OrderStatus='Отменён' WHERE OrderID=?", (order_id,)
+        )
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise RuntimeError(str(e)) from e
