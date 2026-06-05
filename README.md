@@ -97,6 +97,7 @@ make coverage     отчёт покрытия
 make docker-build собрать образ
 make compose-up   запустить в Docker
 make compose-down остановить
+make doks         проверить наличие документации
 make clean        удалить кэши
 ```
 
