@@ -41,4 +41,6 @@ def health():
     return {"status": "ok", "service": "pixel-shop"}
 
 
-
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(TEMPLATES / "index.html")
