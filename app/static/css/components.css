@@ -1,0 +1,17 @@
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border: none; border-radius: var(--radius);
+  font-size: .875rem; font-weight: 500; transition: filter .15s, transform .1s;
+}
+.btn:hover  { filter: brightness(1.08); }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--clr-primary);  color: #fff; }
+.btn-success { background: var(--clr-success);  color: #fff; }
+.btn-danger  { background: var(--clr-danger);   color: #fff; }
+.btn-warning { background: var(--clr-warning);  color: #fff; }
+.btn-outline {
+  background: transparent; color: var(--clr-primary);
+  border: 1.5px solid var(--clr-primary);
+}
+.btn-sm { padding: 5px 10px; font-size: .8rem; }
