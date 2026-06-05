@@ -41,3 +41,33 @@ def order_sums(conn: sqlite3.Connection) -> List[dict]:
         GROUP BY o.OrderID
     """).fetchall()
     return [dict(r) for r in rows]
+
+
+def employee_efficiency(conn: sqlite3.Connection) -> List[dict]:
+    rows = conn.execute("""
+        SELECT e.EmployeeID, e.LastName||' '||e.FirstName AS Name,
+               e.Position, SUM(od.Quantity*od.UnitPrice) AS Revenue
+        FROM Employees e
+        JOIN Orders        o  ON e.EmployeeID=o.EmployeeID
+        JOIN Order_Details od ON o.OrderID=od.OrderID
+        WHERE o.OrderStatus IN ('Оплачен','Выдан')
+        GROUP BY e.EmployeeID ORDER BY Revenue DESC
+    """).fetchall()
+    return [dict(r) for r in rows]
+
+
+def revenue_by_category(conn: sqlite3.Connection) -> list:
+    """Выручка по категориям товаров (оплаченные/выданные заказы)."""
+    rows = conn.execute("""
+        SELECT c.CategoryName,
+               SUM(od.Quantity * od.UnitPrice) AS Revenue,
+               SUM(od.Quantity)                AS TotalQty
+        FROM Order_Details od
+        JOIN Products  p ON od.ProductID = p.ProductID
+        JOIN Categories c ON p.CategoryID = c.CategoryID
+        JOIN Orders     o ON od.OrderID   = o.OrderID
+        WHERE o.OrderStatus IN ('Оплачен', 'Выдан')
+        GROUP BY c.CategoryID
+        ORDER BY Revenue DESC
+    """).fetchall()
+    return [dict(r) for r in rows]
