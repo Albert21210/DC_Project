@@ -28,6 +28,47 @@ test:           ## Запустить тесты
 coverage:       ## Тесты с отчётом покрытия
 	$(PY) -m pytest tests/ --cov=packages/core --cov-report=term-missing
 
+doks:     ## Проверить наличие документации
+	@echo "========================================="
+	@echo "Checking documentation..."
+	@echo "========================================="
+	@echo ""
+	@echo "[Project documentation]"
+	@if [ -f "README.md" ]; then \
+		echo "  [OK]   README.md exists"; \
+	else \
+		echo "  [MISS] README.md MISSING"; \
+	fi
+	@if [ -f "docs/api.md" ]; then \
+		echo "  [OK]   docs/api.md exists"; \
+	else \
+		echo "  [MISS] docs/api.md MISSING"; \
+	fi
+	@if [ -f "docs/architecture.md" ]; then \
+		echo "  [OK]   docs/architecture.md exists"; \
+	else \
+		echo "  [MISS] docs/architecture.md MISSING"; \
+	fi
+	@echo ""
+	@echo "[Test documentation]"
+	@if [ -d "tests" ] && [ $$(ls -1 tests/test_*.py 2>/dev/null | wc -l) -gt 0 ]; then \
+		echo "  [OK]   Tests found ($$(ls -1 tests/test_*.py 2>/dev/null | wc -l) test files)"; \
+	else \
+		echo "  [MISS] No test files found"; \
+	fi
+	@echo ""
+	@echo "========================================="
+	@FAIL=0; \
+	if [ ! -f "README.md" ]; then FAIL=1; fi; \
+	if [ ! -f "docs/api.md" ]; then FAIL=1; fi; \
+	if [ ! -f "docs/architecture.md" ]; then FAIL=1; fi; \
+	if [ $$FAIL -eq 0 ]; then \
+		echo "  STATUS: All documentation is complete!"; \
+	else \
+		echo "  STATUS: Some documentation files are missing."; \
+	fi
+	@echo "========================================="
+
 docker-build:   ## Собрать Docker-образ
 	docker build -t pixel-shop:latest .
 
@@ -49,4 +90,4 @@ clean:          ## Удалить временные файлы
 	rm -rf .coverage htmlcov/ .pytest_cache/ dist/ *.egg-info
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 
-.PHONY: help venv install run test coverage docker-build compose-up compose-logs compose-down reset-db clean
+.PHONY: help venv install run test coverage docs-check docker-build compose-up compose-logs compose-down reset-db clean
