@@ -107,3 +107,9 @@ make clean        удалить кэши
 | `SHOP_DB_PATH` | `shop.db` | Путь к SQLite-базе данных |
 
 ---
+
+## PyPi
+
+Core business logic for Pixel computer store management system.
+
+https://test.pypi.org/project/pixel-shop-core/0.1.0/
