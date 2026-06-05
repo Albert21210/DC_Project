@@ -31,3 +31,27 @@ def get_unpaid(conn: sqlite3.Connection) -> List[dict]:
         GROUP BY o.OrderID
     """).fetchall()
     return [dict(r) for r in rows]
+
+
+def create(conn: sqlite3.Connection, customer_id: int,
+           employee_id: int, cart: Dict[int, dict]) -> int:
+    if not cart:
+        raise ValueError("Корзина пустая")
+    today = datetime.date.today().isoformat()
+    cur = conn.cursor()
+    try:
+        new_id = (cur.execute("SELECT COALESCE(MAX(OrderID),100) FROM Orders").fetchone()[0]) + 1
+        cur.execute("INSERT INTO Orders VALUES(?,?,?,?,'Оформлен')",
+                    (new_id, customer_id, employee_id, today))
+        det_id = cur.execute("SELECT COALESCE(MAX(OrderDetailID),0) FROM Order_Details").fetchone()[0]
+        for pid, item in cart.items():
+            det_id += 1
+            cur.execute("INSERT INTO Order_Details VALUES(?,?,?,?,?)",
+                        (det_id, new_id, pid, item["qty"], item["price"]))
+            cur.execute("UPDATE Products SET StockQuantity=StockQuantity-? WHERE ProductID=?",
+                        (item["qty"], pid))
+        conn.commit()
+        return new_id
+    except Exception as e:
+        conn.rollback()
+        raise RuntimeError(f"Ошибка создания заказа: {e}") from e
