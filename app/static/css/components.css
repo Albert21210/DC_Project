@@ -15,3 +15,24 @@
   border: 1.5px solid var(--clr-primary);
 }
 .btn-sm { padding: 5px 10px; font-size: .8rem; }
+
+/* ── Cards ── */
+.card {
+  background: var(--clr-surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px;
+}
+.card__header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.card__title { font-size: 1rem; font-weight: 600; }
+
+/* ── Stats grid ── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--clr-surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 18px 20px;
+  border-left: 4px solid var(--clr-primary);
+}
+.stat-card__value { font-size: 1.6rem; font-weight: 700; color: var(--clr-primary); }
+.stat-card__label { font-size: .8rem; color: var(--clr-muted); margin-top: 4px; }
