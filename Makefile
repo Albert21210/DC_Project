@@ -19,18 +19,34 @@ install: venv   ## Установить зависимости
 	$(PY) -m pip install -r requirements.txt
 	$(PY) -m pip install -r requirements-dev.txt
 
-run:            ## Запустить сервер
+run:            ## Запустить сервер разработки (http://localhost:8000)
 	$(UV) app.main:app --reload --host 0.0.0.0 --port 8000
 
 test:           ## Запустить тесты
-	$(PY) -m pytest tests/ -v
+	$(PY) -m pytest tests/ -v -p no:warnings
 
 coverage:       ## Тесты с отчётом покрытия
 	$(PY) -m pytest tests/ --cov=packages/core --cov-report=term-missing
+
+docker-build:   ## Собрать Docker-образ
+	docker build -t pixel-shop:latest .
+
+compose-up:     ## Запустить через Docker Compose
+	docker compose up --build -d
+
+compose-logs:   ## Посмотреть логи контейнеров
+	docker compose logs -f
+
+compose-down:   ## Остановить контейнеры
+	docker compose down
+
+reset-db:       ## Сброс БД и Docker томов
+	docker compose down -v
+	rm -rf .coverage htmlcov/
 
 clean:          ## Удалить временные файлы
 	rm -rf $(VENV)
 	rm -rf .coverage htmlcov/ .pytest_cache/ dist/ *.egg-info
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 
-.PHONY: help venv install run test coverage clean
+.PHONY: help venv install run test coverage docker-build compose-up compose-logs compose-down reset-db clean
