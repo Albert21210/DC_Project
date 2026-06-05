@@ -46,3 +46,83 @@
 
   <!-- ── MAIN ── -->
   <main class="main">
+   
+    <!-- ДАШБОРД -->
+    <section id="page-analytics" class="page">
+      <div class="page__title">📊 Дашборд — Аналитика</div>
+      <div id="analytics-content"><div class="spinner"></div></div>
+    </section>
+
+    <!-- ТОВАРЫ -->
+    <section id="page-products" class="page">
+      <div class="page__title">
+        📦 Каталог товаров
+        <button class="btn btn-primary btn-sm" onclick="openRestockModal()">📥 Пополнить склад</button>
+      </div>
+      <div class="card">
+        <div style="margin-bottom:12px;display:flex;gap:10px">
+          <select id="category-filter" class="form-control" onchange="filterByCategory(this.value)" style="max-width:200px"><option value="">Все категории</option></select>
+          <input id="product-search" class="form-control" placeholder="🔍 Поиск по названию..." oninput="searchProducts(this.value)" style="max-width:320px">
+        </div>
+        <div id="products-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ОТЧЁТЫ -->
+    <section id="page-reports" class="page">
+      <div class="page__title">📉 Критические остатки</div>
+      <div class="card" style="margin-bottom:20px">
+        <div id="low-stock-table"><div class="spinner"></div></div>
+      </div>
+      <div class="page__title">💰 Сводка по чекам</div>
+      <div class="card">
+        <div id="order-sums-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ЗАКАЗЫ -->
+    <section id="page-orders" class="page">
+      <div class="page__title">
+        🛒 Заказы
+        <button class="btn btn-primary btn-sm" onclick="openNewOrderModal()">➕ Новый заказ</button>
+      </div>
+      <div class="card">
+        <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm order-filter active" data-status="" onclick="filterOrders(this,'')">Все</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Оформлен" onclick="filterOrders(this,'Оформлен')">🔵 Оформлен</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Оплачен" onclick="filterOrders(this,'Оплачен')">🟡 Оплачен</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Выдан" onclick="filterOrders(this,'Выдан')">🟢 Выдан</button>
+        </div>
+        <div id="orders-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- КЛИЕНТЫ -->
+    <section id="page-customers" class="page">
+      <div class="page__title">
+        👥 Клиенты
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-customer')">➕ Добавить</button>
+      </div>
+      <div class="card">
+        <div id="customers-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- СОТРУДНИКИ -->
+    <section id="page-employees" class="page">
+      <div class="page__title">👔 Сотрудники</div>
+      <div class="card">
+        <div id="employees-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ПОСТАВЩИКИ -->
+    <section id="page-suppliers" class="page">
+      <div class="page__title">🏭 Поставщики</div>
+      <div class="card">
+        <div id="suppliers-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
