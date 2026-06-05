@@ -76,3 +76,58 @@ def init_schema(conn: sqlite3.Connection) -> None:
     """Создаёт таблицы и триггер (идемпотентно)."""
     conn.executescript(_DDL)
     conn.commit()
+
+
+_SEED_CATEGORIES = [
+    (1, "Процессоры",         "Центральные процессоры"),
+    (2, "Видеокарты",         "Графические ускорители"),
+    (3, "Оперативная память", "Модули ОЗУ DDR4/DDR5"),
+    (4, "Накопители",         "SSD и HDD диски"),
+]
+_SEED_SUPPLIERS = [
+    (1, "ООО Дистрибьюция-ИТ", "+74951112233", "sales@it-dist.ru"),
+    (2, "АО Компьютер-Опт",    "+78123334455", "opt@compopt.ru"),
+]
+_SEED_PRODUCTS = [
+    (1, "Intel Core i5-13400F OEM",      1, 1, 18500.0, 15, 12),
+    (2, "AMD Ryzen 7 7800X3D Box",       1, 2, 42000.0,  4, 36),
+    (3, "NVIDIA RTX 4070 Super 12GB",    2, 1, 75000.0,  3, 24),
+    (4, "Kingston FURY Beast DDR5 32GB", 3, 2, 13000.0, 25, 60),
+    (5, "Samsung 990 PRO SSD 1TB",       4, 1, 12500.0, 20, 60),
+]
+_SEED_EMPLOYEES = [
+    (1, "Иванов",  "Алексей", "Старший менеджер",     "2024-01-15"),
+    (2, "Петрова", "Мария",   "Кассир",               "2025-03-10"),
+    (3, "Сидоров", "Дмитрий", "Специалист по сборке", "2024-08-01"),
+]
+_SEED_CUSTOMERS = [
+    (1, "Кузнецов",  "Сергей", "+79001112233", "serg@mail.ru"),
+    (2, "Смирнов",   "Андрей", "+79112223344", "andrey@ya.ru"),
+    (3, "Васильева", "Елена",  "+79223334455", "elena@gmail.com"),
+]
+_SEED_ORDERS = [
+    (101, 1, 1, "2026-05-10", "Выдан"),
+    (102, 2, 1, "2026-05-14", "Оформлен"),
+    (103, 3, 2, "2026-05-15", "Оплачен"),
+]
+_SEED_DETAILS = [
+    (1, 101, 1, 1, 18500.0), (2, 101, 4, 2, 13000.0),
+    (3, 102, 3, 1, 75000.0), (4, 103, 2, 1, 42000.0),
+    (5, 103, 5, 1, 12500.0), (6, 102, 1, 2, 18500.0),
+    (7, 101, 5, 1, 12500.0), (8, 103, 4, 1, 13000.0),
+]
+
+
+def seed_demo_data(conn: sqlite3.Connection) -> None:
+    """Заполняет БД демо-данными, если она пустая (идемпотентно)."""
+    if conn.execute("SELECT COUNT(*) FROM Categories").fetchone()[0]:
+        return
+    cur = conn.cursor()
+    cur.executemany("INSERT INTO Categories VALUES(?,?,?)",       _SEED_CATEGORIES)
+    cur.executemany("INSERT INTO Suppliers VALUES(?,?,?,?)",       _SEED_SUPPLIERS)
+    cur.executemany("INSERT INTO Products VALUES(?,?,?,?,?,?,?)",  _SEED_PRODUCTS)
+    cur.executemany("INSERT INTO Employees VALUES(?,?,?,?,?)",     _SEED_EMPLOYEES)
+    cur.executemany("INSERT INTO Customers VALUES(?,?,?,?,?)",     _SEED_CUSTOMERS)
+    cur.executemany("INSERT INTO Orders VALUES(?,?,?,?,?)",        _SEED_ORDERS)
+    cur.executemany("INSERT INTO Order_Details VALUES(?,?,?,?,?)", _SEED_DETAILS)
+    conn.commit()
