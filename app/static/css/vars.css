@@ -1,0 +1,20 @@
+/* ── Design tokens ── */
+:root {
+  --clr-primary:   #2b6cb0;
+  --clr-primary-d: #1a4e8a;
+  --clr-success:   #2f855a;
+  --clr-danger:    #c53030;
+  --clr-warning:   #b7791f;
+  --clr-bg:        #f0f4f8;
+  --clr-surface:   #ffffff;
+  --clr-border:    #e2e8f0;
+  --clr-text:      #1a202c;
+  --clr-muted:     #718096;
+
+  --radius:  8px;
+  --shadow:  0 1px 4px rgba(0,0,0,.10);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,.13);
+
+  --sidebar-w: 240px;
+  --header-h:  56px;
+}
