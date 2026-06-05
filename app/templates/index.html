@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel — Компьютерный магазин</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+  <meta name="description" content="Компьютерный магазин Pixel — система управления">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/vars.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+
+    <!-- ── HEADER ── -->
+  <header class="header">
+    <button class="header__burger" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+    <span class="header__logo">🖥️ Pixel</span>
+    <span class="header__sub">Компьютерный магазин</span>
+  </header>
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <div style="padding:12px 16px;background:#ebf4ff;margin-bottom:8px;border-radius:6px;margin:8px 10px">
+      <div style="font-size:.7rem;color:var(--clr-muted);margin-bottom:2px">Выручка за 30 дней</div>
+      <div id="sidebar-revenue" style="font-size:1rem;font-weight:700;color:var(--clr-primary)">—</div>
+    </div>
+    <div class="sidebar__section">Обзор</div>
+    <div class="sidebar__item" data-page="analytics">📊 Дашборд</div>
+
+    <div class="sidebar__section">Каталог</div>
+    <div class="sidebar__item" data-page="products">📦 Товары</div>
+    <div class="sidebar__item" data-page="reports">📉 Остатки / Отчёты</div>
+
+    <div class="sidebar__section">Продажи</div>
+    <div class="sidebar__item" data-page="orders">🛒 Заказы</div>
+
+    <div class="sidebar__section">Клиенты и штат</div>
+    <div class="sidebar__item" data-page="customers">👥 Клиенты</div>
+    <div class="sidebar__item" data-page="employees">👔 Сотрудники</div>
+    <div class="sidebar__item" data-page="suppliers">🏭 Поставщики</div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+   
+    <!-- ДАШБОРД -->
+    <section id="page-analytics" class="page">
+      <div class="page__title">📊 Дашборд — Аналитика</div>
+      <div id="analytics-content"><div class="spinner"></div></div>
+    </section>
+
+    <!-- ТОВАРЫ -->
+    <section id="page-products" class="page">
+      <div class="page__title">
+        📦 Каталог товаров
+        <button class="btn btn-primary btn-sm" onclick="openRestockModal()">📥 Пополнить склад</button>
+      </div>
+      <div class="card">
+        <div style="margin-bottom:12px;display:flex;gap:10px">
+          <select id="category-filter" class="form-control" onchange="filterByCategory(this.value)" style="max-width:200px"><option value="">Все категории</option></select>
+          <input id="product-search" class="form-control" placeholder="🔍 Поиск по названию..." oninput="searchProducts(this.value)" style="max-width:320px">
+        </div>
+        <div id="products-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ОТЧЁТЫ -->
+    <section id="page-reports" class="page">
+      <div class="page__title">📉 Критические остатки</div>
+      <div class="card" style="margin-bottom:20px">
+        <div id="low-stock-table"><div class="spinner"></div></div>
+      </div>
+      <div class="page__title">💰 Сводка по чекам</div>
+      <div class="card">
+        <div id="order-sums-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ЗАКАЗЫ -->
+    <section id="page-orders" class="page">
+      <div class="page__title">
+        🛒 Заказы
+        <button class="btn btn-primary btn-sm" onclick="openNewOrderModal()">➕ Новый заказ</button>
+      </div>
+      <div class="card">
+        <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm order-filter active" data-status="" onclick="filterOrders(this,'')">Все</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Оформлен" onclick="filterOrders(this,'Оформлен')">🔵 Оформлен</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Оплачен" onclick="filterOrders(this,'Оплачен')">🟡 Оплачен</button>
+          <button class="btn btn-outline btn-sm order-filter" data-status="Выдан" onclick="filterOrders(this,'Выдан')">🟢 Выдан</button>
+        </div>
+        <div id="orders-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- КЛИЕНТЫ -->
+    <section id="page-customers" class="page">
+      <div class="page__title">
+        👥 Клиенты
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-customer')">➕ Добавить</button>
+      </div>
+      <div class="card">
+        <div id="customers-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- СОТРУДНИКИ -->
+    <section id="page-employees" class="page">
+      <div class="page__title">👔 Сотрудники</div>
+      <div class="card">
+        <div id="employees-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+    <!-- ПОСТАВЩИКИ -->
+    <section id="page-suppliers" class="page">
+      <div class="page__title">🏭 Поставщики</div>
+      <div class="card">
+        <div id="suppliers-table"><div class="spinner"></div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══════════════════ МОДАЛЫ ══════════════════ -->
+
+<!-- Пополнение склада -->
+<div id="modal-restock" class="modal-overlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">📥 Пополнение склада</span>
+      <button class="modal__close" onclick="closeModal('modal-restock')">×</button>
+    </div>
+    <form onsubmit="submitRestock(event)">
+      <div class="form-group">
+        <label>Товар</label>
+        <select id="restock-pid" class="form-control"></select>
+      </div>
+      <div class="form-group">
+        <label>Количество</label>
+        <input id="restock-qty" type="number" min="1" value="10" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success" style="width:100%;margin-top:8px">Зачислить на склад</button>
+    </form>
+  </div>
+</div>
+
+<!-- Новый заказ -->
+<div id="modal-new-order" class="modal-overlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">🛒 Новый заказ</span>
+      <button class="modal__close" onclick="closeModal('modal-new-order')">×</button>
+    </div>
+    <div class="form-row" style="margin-bottom:12px">
+      <div class="form-group">
+        <label>Клиент</label>
+        <select id="order-customer" class="form-control"></select>
+      </div>
+      <div class="form-group">
+        <label>Менеджер</label>
+        <select id="order-employee" class="form-control"></select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:12px;align-items:flex-end">
+      <div class="form-group" style="margin:0">
+        <label>Товар</label>
+        <select id="order-product" class="form-control"></select>
+      </div>
+      <div class="form-group" style="margin:0">
+        <label>Кол-во</label>
+        <input id="order-qty" type="number" min="1" value="1" class="form-control">
+      </div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="addToCart()" style="margin-bottom:14px">➕ Добавить в чек</button>
+    <table style="width:100%;margin-bottom:8px;font-size:.85rem">
+      <thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th></th></tr></thead>
+      <tbody id="cart-body"><tr><td colspan="5" class="empty-state">Корзина пуста</td></tr></tbody>
+    </table>
+    <div style="text-align:right;font-weight:700;margin-bottom:14px">Итого: <span id="cart-total">0 ₽</span></div>
+    <button class="btn btn-success" style="width:100%" onclick="submitNewOrder()">💾 Оформить заказ</button>
+  </div>
+</div>
+
+<!-- Добавить клиента -->
+<div id="modal-new-customer" class="modal-overlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">👤 Новый клиент</span>
+      <button class="modal__close" onclick="closeModal('modal-new-customer')">×</button>
+    </div>
+    <form onsubmit="submitNewCustomer(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Фамилия</label>
+          <input name="last_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Имя</label>
+          <input name="first_name" class="form-control" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Телефон</label>
+          <input name="phone" class="form-control" placeholder="+7...">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input name="email" class="form-control" type="email">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Детали заказа -->
+<div id="modal-order-detail" class="modal-overlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title">📋 Детали заказа</span>
+      <button class="modal__close" onclick="closeModal('modal-order-detail')">×</button>
+    </div>
+    <div id="order-detail-content"></div>
+  </div>
+</div>
+
+<!-- ── Toast container ── -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ── Scripts ── -->
+<script src="/static/js/api.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/pages/products.js"></script>
+<script src="/static/js/pages/orders.js"></script>
+<script src="/static/js/pages/analytics.js"></script>
+<script src="/static/js/pages/customers.js"></script>
+<script src="/static/js/pages/employees.js"></script>
+<script src="/static/js/pages/reports.js"></script>
+<script src="/static/js/pages/suppliers.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
